@@ -1,11 +1,12 @@
+import { useState } from "react";
 import "./TodoItem.css";
 
-const TodoItem = ({dataItem}) => {
+const TodoItem = ({ id, isDone, content, date }) => {
   return (
     <div className="TodoItem">
-      <input type="checkbox" />
-      <div className="content">{dataItem.content}</div>
-      <div className="date">{dataItem.date}</div>
+      <input type="checkbox" checked={isDone} readOnly onChange={() => {}} />
+      <div className="content">{content}</div>
+      <div className="date">{new Date(date).toLocaleDateString()}</div>
       <button>삭제</button>
     </div>
   );
