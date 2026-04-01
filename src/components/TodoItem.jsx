@@ -1,26 +1,19 @@
 import { useState } from "react";
 import "./TodoItem.css";
 
-const TodoItem = ({ id, isDone, content, date, onUpdate, onDelete }) => {
-  const onChangeCheckBox = () => {
-    onUpdate(id);
+const TodoItem = ({ id, content, isDone, date, onDelete, onModify }) => {
+  const onChangeCheck = (e) => {
+    onModify(id);
   };
-
-  const onClickDeleteButton = () => {
+  const onDeleteEvent = (e) => {
     onDelete(id);
   };
-
   return (
     <div className="TodoItem">
-      <input
-        type="checkbox"
-        checked={isDone}
-        readOnly
-        onChange={onChangeCheckBox}
-      />
+      <input checked={isDone} onChange={onChangeCheck} type="checkbox" />
       <div className="content">{content}</div>
       <div className="date">{new Date(date).toLocaleDateString()}</div>
-      <button onClick={onClickDeleteButton}>삭제</button>
+      <button onClick={onDeleteEvent}>삭제</button>
     </div>
   );
 };
