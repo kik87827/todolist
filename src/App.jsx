@@ -4,57 +4,7 @@ import Editor from "./components/Editor";
 import Header from "./components/Header";
 import List from "./components/List";
 
-const sampleData = [
-  {
-    id: 0,
-    isDone: false,
-    content: "React 공부하기",
-    date: new Date().getTime(),
-  },
-  {
-    id: 1,
-    isDone: false,
-    content: "빨래하기",
-    date: new Date().getTime(),
-  },
-  {
-    id: 2,
-    isDone: false,
-    content: "노래연습하기",
-    date: new Date().getTime(),
-  },
-];
-
 function App() {
-<<<<<<< HEAD
-  const [todos, setTodos] = useState(sampleData);
-  const idRef = useRef(todos.length);
-
-  const onCreate = (content) => {
-    const pushTodos = [
-      {
-        id: idRef.current++,
-        content: content,
-        isDone: false,
-        date: new Date().getTime(),
-      },
-      ...todos,
-    ];
-    setTodos(pushTodos);
-  };
-
-  const onDelete = (id) => {
-    const updateItems = todos.filter((item) => item.id !== id);
-    setTodos(updateItems);
-  };
-
-  const onModify = (id) => {
-    const updateItems = todos.map((item) => {
-      return item.id === id ? { ...item, isDone: !item.isDone } : item;
-    });
-    setTodos(updateItems);
-  };
-=======
   const mockData = [
     {
       id: 0,
@@ -76,30 +26,47 @@ function App() {
     },
   ];
   const [todos, setTodos] = useState(mockData);
-  const idRef = useRef(Number(mockData.length))
+  const idRef = useRef(Number(mockData.length));
 
   const onCreate = (content) => {
-    const newTodos = [{
-      id: idRef.current++,
-      isDone: false,
-      content,
-      date: new Date().getTime(),
-    },...todos];
+    const newTodos = [
+      {
+        id: idRef.current++,
+        isDone: false,
+        content,
+        date: new Date().getTime(),
+      },
+      ...todos,
+    ];
 
     setTodos(newTodos);
-  }
->>>>>>> 306de8c576d62e4aa32b1c43a764e01cf897808c
+  };
+
+  const onModify = (targetId) => {
+    /* const modifyTodos = todos.map((item) => {
+      if (targetId == item.id) {
+        return {
+          ...item,
+          isDone: !item.isDone,
+        };
+      }
+    }); */
+    const modifyTodos = todos.map((todo) =>
+      todo.id === targetId ? { ...todo, isDone: !todo.isDone } : todo,
+    );
+    setTodos(modifyTodos);
+  };
+
+  const onDelete = (targetId) => {
+    const filteredTodos = todos.filter((item) => item.id !== targetId);
+    setTodos(filteredTodos);
+  };
 
   return (
     <div className="App">
       <Header />
-<<<<<<< HEAD
       <Editor onCreate={onCreate} />
-      <List todos={todos} onDelete={onDelete} onModify={onModify} />
-=======
-      <Editor  onCreate={onCreate} />
-      <List todos={todos} />
->>>>>>> 306de8c576d62e4aa32b1c43a764e01cf897808c
+      <List todos={todos} onModify={onModify} onDelete={onDelete} />
     </div>
   );
 }
