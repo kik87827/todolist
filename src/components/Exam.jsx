@@ -4,29 +4,21 @@ import { useReducer } from "react";
 // -> 상태를 실제로 변화시키는 변환기 역할
 function reducer(state, { type, data }) {
   console.log(state, { type, data });
-  /* if (type === "INCRESE") {
-    return state + data;
-  } else if (type === "DECREASE") {
-    return state - data;
-  } */
   switch (type) {
     case "INCREASE":
       return state + data;
     case "DECREASE":
       return state - data;
-    default:
-      return state;
   }
 }
 
 const Exam = () => {
   // dispatch : 발송하다, 급송하다.
-  // -> 상태 변화가 있어야 한다는 사실을 알리는, 발송하는 함수
+  //  -> 상태 변화가 있어야 한다는 사실을 알리는, 발송하는 함수
   const [state, dispatch] = useReducer(reducer, 0);
 
   const onClickPlus = () => {
-    // 인수 : 상태가 어떻게 변화되길 원하는지
-
+    // 인수 : 상태가 어떻게 변화되길 원하는지...
     // -> 액션 객체
     dispatch({
       type: "INCREASE",
