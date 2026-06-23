@@ -1,9 +1,23 @@
-import { useRef, useState } from "react";
+import { useReducer, useRef, useState } from "react";
 import "./App.css";
 import Editor from "./components/Editor";
 import Header from "./components/Header";
 import List from "./components/List";
-import Exam from "./components/Exam";
+
+function reducer(state, { type, data, targetId }) {
+  switch (type) {
+    case "CREATE":
+      return [data, ...state];
+    case "UPDATE":
+      return state.map((todo) =>
+        todo.id === targetId ? { ...todo, isDone: !todo.isDone } : todo,
+      );
+    case "DELETE":
+      return state.filter((todo) => todo.id !== targetId);
+    default:
+      return state;
+  }
+}
 
 function App() {
   const mockData = [
@@ -26,11 +40,12 @@ function App() {
       date: new Date().getTime(),
     },
   ];
-  const [todos, setTodos] = useState(mockData);
+  /*  const [todos, setTodos] = useState(mockData); */
+  const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(Number(mockData.length));
 
   const onCreate = (content) => {
-    const newTodos = [
+    /*  const newTodos = [
       {
         id: idRef.current++,
         isDone: false,
@@ -40,35 +55,45 @@ function App() {
       ...todos,
     ];
 
-    setTodos(newTodos);
+    setTodos(newTodos); */
+    dispatch({
+      type: "CREATE",
+      data: {
+        id: idRef.current++,
+        isDone: false,
+        content,
+        date: new Date().getTime(),
+      },
+    });
   };
 
   const onModify = (targetId) => {
-    /* const modifyTodos = todos.map((item) => {
-      if (targetId == item.id) {
-        return {
-          ...item,
-          isDone: !item.isDone,
-        };
-      }
-    }); */
-    const modifyTodos = todos.map((todo) =>
+    /*   const modifyTodos = todos.map((todo) =>
       todo.id === targetId ? { ...todo, isDone: !todo.isDone } : todo,
     );
-    setTodos(modifyTodos);
+    setTodos(modifyTodos); */
+
+    dispatch({
+      type: "UPDATE",
+      targetId,
+    });
   };
 
   const onDelete = (targetId) => {
-    const filteredTodos = todos.filter((item) => item.id !== targetId);
-    setTodos(filteredTodos);
+    /* const filteredTodos = todos.filter((item) => item.id !== targetId);
+    setTodos(filteredTodos); */
+
+    dispatch({
+      type: "DELETE",
+      targetId,
+    });
   };
 
   return (
     <div className="App">
-      {/* <Header />
+      <Header />
       <Editor onCreate={onCreate} />
-      <List todos={todos} onModify={onModify} onDelete={onDelete} /> */}
-      <Exam />
+      <List todos={todos} onModify={onModify} onDelete={onDelete} />
     </div>
   );
 }
