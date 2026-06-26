@@ -97,10 +97,9 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Header />
+      <Header />
       <Editor onCreate={onCreate} />
-      <List todos={todos} onModify={onModify} onDelete={onDelete} /> */}
-      <Exam />
+      <List todos={todos} onModify={onModify} onDelete={onDelete} />
     </div>
   );
 }
