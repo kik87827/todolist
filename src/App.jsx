@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useReducer, useRef, useState } from "react";
 import "./App.css";
 import Editor from "./components/Editor";
 import Header from "./components/Header";
@@ -25,11 +25,29 @@ function App() {
       date: new Date().getTime(),
     },
   ];
-  const [todos, setTodos] = useState(mockData);
+
+  const reducer = (state, { type, data, targetId }) => {
+    switch (type) {
+      case "CREATE":
+        return [data, ...state];
+      case "UPDATE":
+        return state.map((todo) =>
+          todo.id === targetId ? { ...todo, isDone: !todo.isDone } : todo
+        );
+      case "DELETE":
+        return state.filter((item) => item.id !== targetId);
+      default: return state;
+    }
+  };
+
+  /* const [todos, setTodos] = useState(mockData); */
+  const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(Number(mockData.length));
 
+  
+
   const onCreate = (content) => {
-    const newTodos = [
+    /* const newTodos = [
       {
         id: idRef.current++,
         isDone: false,
@@ -39,7 +57,16 @@ function App() {
       ...todos,
     ];
 
-    setTodos(newTodos);
+    setTodos(newTodos); */
+    dispatch({
+      type: "CREATE",
+      data: {
+        id: idRef.current++,
+        isDone: false,
+        content,
+        date: new Date().getTime(),
+      },
+    });
   };
 
   const onModify = (targetId) => {
@@ -51,15 +78,23 @@ function App() {
         };
       }
     }); */
-    const modifyTodos = todos.map((todo) =>
+    /* const modifyTodos = todos.map((todo) =>
       todo.id === targetId ? { ...todo, isDone: !todo.isDone } : todo,
     );
-    setTodos(modifyTodos);
+    setTodos(modifyTodos); */
+    dispatch({
+      type: "UPDATE",
+      targetId,
+    });
   };
 
   const onDelete = (targetId) => {
-    const filteredTodos = todos.filter((item) => item.id !== targetId);
-    setTodos(filteredTodos);
+    /* const filteredTodos = todos.filter((item) => item.id !== targetId);
+    setTodos(filteredTodos); */
+    dispatch({
+      type: "DELETE",
+      targetId,
+    });
   };
 
   return (
